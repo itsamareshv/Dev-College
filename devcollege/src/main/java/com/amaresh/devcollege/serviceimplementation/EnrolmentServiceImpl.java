@@ -65,8 +65,23 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			return message;
 		}
 		
+		List<Enrolment> allEnrolmentsByStudentID = this.enrolmentRepo.getAllEnrolmentsByStudentID(enrolment.getStudent_id());
+		ArrayList<Date> dateData = new ArrayList<Date>();
+		for (Enrolment enrolls : allEnrolmentsByStudentID) {
+			dateData.add(enrolls.getCuurseEndDT());
+			
+		}
 		
-
+		
+		for (int i = 0; i < dateData.size(); i++) {
+			if(dateData.get(i).after(enrolment.getCourseStartDT()))
+			{
+				Map<String, String> message1 = new HashMap<String, String>();
+				message1.put("Failed To Enroll For This Course ","You have taken course in same duration");
+				return message1;
+		}
+		}
+		
 		enrolmentRepo.save(enrolment);
 		Map<String, String> message = new HashMap<String, String>();
 

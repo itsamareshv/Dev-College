@@ -45,11 +45,15 @@ public class CourseServiceImpl implements CourseService {
 				.orElseThrow(() -> new ResourceNotFoundException("courseId", "courseId", courseId));
 		List<Enrolment> enrolements = enrolmentRepo.findAll();
 		ArrayList<String> idData = new ArrayList<String>();
+	//	ArrayList<String> courseStatus = new ArrayList<String>();
 		for (Enrolment enrol : enrolements) {
-			String courseIdTemp = enrol.getCourse_id();
-			idData.add(courseIdTemp);
+			idData.add(enrol.getCourse_id());
+			//courseStatus.add(enrol.getStatus());
+			
 		}
 		System.out.println(idData);
+		//System.out.println(courseStatus);
+		
 
 		boolean flag = false;
 		for (int i = 0; i < idData.size(); i++) {
@@ -71,8 +75,7 @@ public class CourseServiceImpl implements CourseService {
 					this.courseRepo.save(course1);
 					Map<String, String> message = new HashMap<String, String>();
 					message.put(
-							"Successfully Partially Updated Course details because Courses is already taken By Students",
-							courseId);
+							"Course Name :"+" Course Discription :"+" No of Registrations :"+" Updated For Course ID =",courseId);
 					return message;
 				}
 			}
