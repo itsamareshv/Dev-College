@@ -1,5 +1,7 @@
 package com.amaresh.devcollege.serviceimplementation;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,33 +35,13 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 	@Autowired
 	private CourseRepo courseRepo;
 
-	private Course course;
-
-	private Student student;
-
-	private String studentName;
-
-	private String courseName;
-
-	private float courseFees;
-
-	private float walletAmount;
-
-	// add enrollment
+	// ADD ENROLMENT
 	@Override
 	public Map<String, String> addEnrolment(Enrolment enrolment) {
-		String student_id = enrolment.getStudent_id();
-		String course_id = enrolment.getCourse_id();
-		course = courseRepo.findById(course_id)
-				.orElseThrow(() -> new ResourceNotFoundException("course_id", "student_id", course_id));
-		courseName = course.getCourseName();
-		courseFees = course.getCourseFees();
-		System.out.println(courseFees);
-		System.out.println(courseName);
-		student = studentRepo.findById(student_id)
-				.orElseThrow(() -> new ResourceNotFoundException("student_id", "student_id", student_id));
-		studentName = student.getStudentName();
-		walletAmount = student.getWalletAmount();
+		Course course = courseRepo.findById(enrolment.getCourse_id())
+				.orElseThrow(() -> new ResourceNotFoundException("courseId", "courseId", enrolment.getCourse_id()));
+		Student student = studentRepo.findById(enrolment.getStudent_id())
+				.orElseThrow(() -> new ResourceNotFoundException("studentId", "studentId", enrolment.getStudent_id()));
 		if (course.getNoOfRegistrations() >= 1) {
 			course.setNoOfRegistrations(course.getNoOfRegistrations() - 1);
 		} else {
@@ -70,35 +51,27 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			return message;
 		}
 
-		if (walletAmount >= courseFees) {
-			student.setWalletAmount(walletAmount - courseFees);
+		if (student.getWalletAmount() >= course.getCourseFees()) {
+			student.setWalletAmount(student.getWalletAmount() - course.getCourseFees());
 			enrolment.setStatus("Allocated");
 			Calendar calendar = Calendar.getInstance();
-			Date stratdate = enrolment.getCourseStartDT();
-			//timeInSecs=date.getTimeInMillis();
-			calendar.setTime(stratdate);
-			//long minutes = 60000;
-			int hours = course.getCourseDuration();
-			//Date oldDate = date.
-			//System.out.println(oldDate.getTime());
-			
-		//	Date newDate = new Date(oldDate.getMinutes() + hours);
-			//Date newDate=new Date()
-			calendar.add(Calendar.MINUTE, hours);
-			System.out.println(calendar.getTime());
+			calendar.setTime(enrolment.getCourseStartDT());
+			calendar.add(Calendar.MINUTE, course.getCourseDuration());
 			enrolment.setCuurseEndDT(calendar.getTime());
+			System.out.println(calendar.getTime());
 		} else {
 			Map<String, String> message = new HashMap<String, String>();
-			String lowBalance = "" + walletAmount;
-			message.put("Cant Opt For Courses Due To Low Wallet Amount", lowBalance);
+			message.put("Cant Opt For Courses Due To Low Wallet Amount", "" + student.getWalletAmount());
 			return message;
 		}
+		
+		
 
 		enrolmentRepo.save(enrolment);
 		Map<String, String> message = new HashMap<String, String>();
 
-		message.put(studentName + " Successfully Enrolled in Course = " + courseName + " and Enrolment ID =",
-				enrolment.getEnrolmentId());
+		message.put(student.getStudentName() + " Successfully Enrolled in Course = " + course.getCourseName()
+				+ " and Enrolment ID =", enrolment.getEnrolmentId());
 
 		return message;
 	}
@@ -144,8 +117,8 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 	public Map<String, String> changeStatus(Enrolment enrolment, String enrolmentId) {
 		Enrolment enrolment2 = this.enrolmentRepo.findById(enrolmentId)
 				.orElseThrow(() -> new ResourceNotFoundException("enrolmentId", "enrolmentId", enrolmentId));
-		student = studentRepo.findById(enrolment2.getStudent_id()).orElseThrow();
-		course = courseRepo.findById(enrolment2.getCourse_id()).orElseThrow();
+		Student student = studentRepo.findById(enrolment2.getStudent_id()).orElseThrow();
+		Course course = courseRepo.findById(enrolment2.getCourse_id()).orElseThrow();
 		if (enrolment2.getStatus().equalsIgnoreCase("Cancelled")) {
 			if (enrolment.getStatus().equalsIgnoreCase("Progress")) {
 				Map<String, String> message = new HashMap<String, String>();
@@ -210,9 +183,10 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		Student student = this.studentRepo.findById(studentId)
 				.orElseThrow(() -> new ResourceNotFoundException("studentId", "studentId", studentId));
 		String highestQualification = student.getHighestQualification();
+
 		if (highestQualification.equalsIgnoreCase("bca") || highestQualification.equalsIgnoreCase("bsc")) {
 			Map<String, String> suggestionList1 = new HashMap<String, String>();
-			
+
 			suggestionList1.put(" -->CourseName=", "MBA");
 			suggestionList1.put(" -->CourseName=", "MSc");
 			return suggestionList1;
@@ -221,17 +195,17 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			suggestionList2.put(" -->CourseName =", "MBA");
 			suggestionList2.put(" -->CourseName =", "Mcom");
 			return suggestionList2;
-		}else if (highestQualification.equalsIgnoreCase("MBA") || highestQualification.equalsIgnoreCase("MCA")) {
+		} else if (highestQualification.equalsIgnoreCase("MBA") || highestQualification.equalsIgnoreCase("MCA")) {
 			Map<String, String> suggestionList2 = new HashMap<String, String>();
 			suggestionList2.put(" -->CourseName =", "MPhil");
-			//suggestionList2.put(" -->CourseName =", "");
+			// suggestionList2.put(" -->CourseName =", "");
 			return suggestionList2;
-		}else {
+		} else {
 			Map<String, String> suggestionList2 = new HashMap<String, String>();
 			suggestionList2.put("No Suggestion Found", "Please Come Back After Some Time");
-			//suggestionList2.put(" -->CourseName =", "");
+			// suggestionList2.put(" -->CourseName =", "");
 			return suggestionList2;
-		
+
 		}
 
 	}

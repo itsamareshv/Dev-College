@@ -16,9 +16,9 @@ import lombok.Setter;
 public class EnrolmentResponse {
 
 	private String enrolmentId;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SS")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Date courseStartDT;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SS")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Date cuurseEndDT;
 	private String status;
 	private String course_id;

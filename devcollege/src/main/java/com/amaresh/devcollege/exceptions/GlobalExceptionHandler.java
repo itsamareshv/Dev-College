@@ -6,12 +6,14 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.amaresh.devcollege.payloads.ApiResponse;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -48,10 +50,15 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<ApiResponse> resourceNFoundExceptionHandler(HttpMessageNotReadableException ex) {
+	public ResponseEntity<Map<String, String>> resourceNFoundExceptionHandler(HttpMessageNotReadableException ex) {
+		Throwable cause = ex.getCause();
 		
-		ApiResponse apiResponse = new ApiResponse("feild value  Should be int", false);
-
-		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_ACCEPTABLE);
+		Map<String, String> response = new HashMap<>();
+		if (cause instanceof MismatchedInputException) {
+			MismatchedInputException missMatchedException = (MismatchedInputException) cause;
+			response.put("Feild Aceepts Only Integers =", missMatchedException.getPath().get(0).getFieldName());
+			System.out.println("1->>>" + missMatchedException.getPath().get(0).getFieldName());
+		}
+		return new ResponseEntity<Map<String, String>>(response, null, HttpStatus.BAD_REQUEST);
 	}
 }

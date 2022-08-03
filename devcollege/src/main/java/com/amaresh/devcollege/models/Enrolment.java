@@ -38,10 +38,10 @@ public class Enrolment {
 			@Parameter(name = StringPrefixedSequenceIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d") })
 	private String enrolmentId;
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SS")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date courseStartDT;
 	
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SS")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date cuurseEndDT;
 	private String status;
 

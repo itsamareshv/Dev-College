@@ -89,10 +89,7 @@ public class StudentServiceImplementation implements StudentService {
 		
 		
 		}
-		
-		
 
-//	}
 
 	// GET STUDENT LIST
 	@Override
@@ -115,12 +112,23 @@ public class StudentServiceImplementation implements StudentService {
 
 	// UPDATE WALLET AMOUNT BY OLD AMOUNT
 	@Override
-	public StudentDto updateStudentWalletAmount(StudentDto studentDto, String studentId) {
+	public Map<String,String> updateStudentWalletAmount(StudentDto studentDto, String studentId) {
 		Student id = this.studentRepo.findById(studentId)
 				.orElseThrow(() -> new ResourceNotFoundException("studentId", "studentId", studentId));
-		id.setWalletAmount(id.getWalletAmount() + studentDto.getWalletAmount());
-		Student save = this.studentRepo.save(id);
-		return this.modelMapper.map(save, StudentDto.class);
+		
+		if(studentDto.getWalletAmount()>1) {
+			id.setWalletAmount(id.getWalletAmount() + studentDto.getWalletAmount());
+			Student save = this.studentRepo.save(id);
+			Map<String, String> message = new HashMap<String, String>();
+			String walletAmount = "" + id.getWalletAmount();
+			message.put("Successfully added Amount for Student ID " + studentId + " and available balance is =",
+					walletAmount);
+			return message;
+		}else {
+			Map<String, String> message = new HashMap<String, String>();
+			message.put("Money Cant Be Less Than 1 Rs", ""+studentDto.getWalletAmount());
+			return message;
+		}
 	}
 
 	// GET WALLET DETAILS 

@@ -90,12 +90,8 @@ public class StudentController {
 	@PutMapping("/walletupdate/{studentId}")
 	public ResponseEntity<Map<String, String>> updateStudentWalletAmount(@RequestBody StudentDto studentDto,
 			@PathVariable String studentId) {
-		StudentDto updateStudentWalletAmount = this.studentService.updateStudentWalletAmount(studentDto, studentId);
-		Map<String, String> message = new HashMap<String, String>();
-		String walletAmount = "" + updateStudentWalletAmount.getWalletAmount();
-		message.put("Successfully added Amount for Student ID " + studentId + " and available balance is =",
-				walletAmount);
-		return new ResponseEntity<>(message, HttpStatus.OK);
+		Map<String, String> updateStudentWalletAmount = this.studentService.updateStudentWalletAmount(studentDto, studentId);
+		return new ResponseEntity<>(updateStudentWalletAmount, HttpStatus.OK);
 
 	}
 

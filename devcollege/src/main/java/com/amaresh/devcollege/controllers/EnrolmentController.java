@@ -35,10 +35,6 @@ public class EnrolmentController {
 	// ADD ENROLMENT
 	@PostMapping("/addenrolment")
 	public Map<String, String> adden(@RequestBody EnrolmentDto enrolmentDto) {
-		String course_id = enrolmentDto.getCourse_id();
-		String student_id = enrolmentDto.getStudent_id();
-		System.out.println(course_id);
-		System.out.println(student_id);
 		Enrolment createEnrolment = modelMapper.map(enrolmentDto, Enrolment.class);
 		return enrolmentService.addEnrolment(createEnrolment);
 	}

@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class EnrolmentDto {
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SS")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Date courseStartDT;
 
 	private String student_id;

@@ -13,7 +13,7 @@ public interface StudentService {
 	Map<String, String> deleteStudent(String studentId);
 	List<StudentDto> getStudentList();
 	StudentDto getStudentById(String studentId);
-	StudentDto updateStudentWalletAmount(StudentDto studentDto,String studentId);
+	Map<String,String> updateStudentWalletAmount(StudentDto studentDto,String studentId);
 	Student getWalletDetails(String studentId);
 	
 	
