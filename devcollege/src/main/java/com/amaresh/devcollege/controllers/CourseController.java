@@ -23,7 +23,7 @@ import com.amaresh.devcollege.models.Course;
 import com.amaresh.devcollege.payloads.CourseDto;
 import com.amaresh.devcollege.services.CourseService;
 
-@Controller
+
 @RestController
 @RequestMapping("/course")
 public class CourseController {

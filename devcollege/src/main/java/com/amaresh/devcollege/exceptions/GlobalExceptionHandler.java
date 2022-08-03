@@ -49,8 +49,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ApiResponse> resourceNFoundExceptionHandler(HttpMessageNotReadableException ex) {
-		// Throwable cause =
-		// String message = ex.;
+		
 		ApiResponse apiResponse = new ApiResponse("feild value  Should be int", false);
 
 		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_ACCEPTABLE);

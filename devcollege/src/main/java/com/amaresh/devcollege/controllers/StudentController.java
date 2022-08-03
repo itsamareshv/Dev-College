@@ -53,10 +53,10 @@ public class StudentController {
 	// DELETE STUDENT BY STUDENT ID
 	@DeleteMapping("/deletestudent/{studentId}")
 	public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable String studentId) {
-		this.studentService.deleteStudent(studentId);
-		Map<String, String> message = new HashMap<String, String>();
-		message.put("Successfully Deleted Student details for Student ID = ", studentId);
-		return new ResponseEntity<Map<String, String>>(message, HttpStatus.OK);
+		Map<String, String> deleteStudent = this.studentService.deleteStudent(studentId);
+//		Map<String, String> message = new HashMap<String, String>();
+//		message.put("Successfully Deleted Student details for Student ID = ", studentId);
+		return new ResponseEntity<Map<String, String>>(deleteStudent, HttpStatus.OK);
 	}
 
 	// GET ALL STUDENTS

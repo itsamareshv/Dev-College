@@ -212,7 +212,7 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		String highestQualification = student.getHighestQualification();
 		if (highestQualification.equalsIgnoreCase("bca") || highestQualification.equalsIgnoreCase("bsc")) {
 			Map<String, String> suggestionList1 = new HashMap<String, String>();
-			suggestionList1.put(" -->CourseName =", "BCA");
+			
 			suggestionList1.put(" -->CourseName=", "MBA");
 			suggestionList1.put(" -->CourseName=", "MSc");
 			return suggestionList1;
@@ -221,8 +221,18 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			suggestionList2.put(" -->CourseName =", "MBA");
 			suggestionList2.put(" -->CourseName =", "Mcom");
 			return suggestionList2;
+		}else if (highestQualification.equalsIgnoreCase("MBA") || highestQualification.equalsIgnoreCase("MCA")) {
+			Map<String, String> suggestionList2 = new HashMap<String, String>();
+			suggestionList2.put(" -->CourseName =", "MPhil");
+			//suggestionList2.put(" -->CourseName =", "");
+			return suggestionList2;
+		}else {
+			Map<String, String> suggestionList2 = new HashMap<String, String>();
+			suggestionList2.put("No Suggestion Found", "Please Come Back After Some Time");
+			//suggestionList2.put(" -->CourseName =", "");
+			return suggestionList2;
+		
 		}
-		return null;
 
 	}
 
