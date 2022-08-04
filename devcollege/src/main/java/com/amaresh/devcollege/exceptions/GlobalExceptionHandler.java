@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<Map<String, String>> resourceNFoundExceptionHandler(HttpMessageNotReadableException ex) {
 		Throwable cause = ex.getCause();
-		
+
 		Map<String, String> response = new HashMap<>();
 		if (cause instanceof MismatchedInputException) {
 			MismatchedInputException missMatchedException = (MismatchedInputException) cause;
