@@ -64,24 +64,23 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			message.put("Cant Opt For Courses Due To Low Wallet Amount", "" + student.getWalletAmount());
 			return message;
 		}
-		
-		List<Enrolment> allEnrolmentsByStudentID = this.enrolmentRepo.getAllEnrolmentsByStudentID(enrolment.getStudent_id());
+
+		List<Enrolment> allEnrolmentsByStudentID = this.enrolmentRepo
+				.getAllEnrolmentsByStudentID(enrolment.getStudent_id());
 		ArrayList<Date> dateData = new ArrayList<Date>();
 		for (Enrolment enrolls : allEnrolmentsByStudentID) {
 			dateData.add(enrolls.getCuurseEndDT());
-			
+
 		}
-		
-		
+
 		for (int i = 0; i < dateData.size(); i++) {
-			if(dateData.get(i).after(enrolment.getCourseStartDT()))
-			{
+			if (dateData.get(i).after(enrolment.getCourseStartDT())) {
 				Map<String, String> message1 = new HashMap<String, String>();
-				message1.put("Failed To Enroll For This Course ","You have taken course in same duration");
+				message1.put("Failed To Enroll For This Course ", "You have taken course in same duration");
 				return message1;
+			}
 		}
-		}
-		
+
 		enrolmentRepo.save(enrolment);
 		Map<String, String> message = new HashMap<String, String>();
 
@@ -153,7 +152,9 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			if (enrolment.getStatus().equalsIgnoreCase("Cancelled")) {
 				Date courseStartDate = enrolment2.getCourseStartDT();
 				System.out.println("Course Start Date =" + courseStartDate);
+				
 				LocalDateTime courseCanceledDate = LocalDateTime.now();
+				
 				System.out.println("Course Canceled Date " + courseCanceledDate);
 				int courseStartDay = courseStartDate.getDate();
 				int cancelDay = courseCanceledDate.getDayOfMonth();
@@ -197,31 +198,17 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 	public Map<String, String> courseSuggestion(Enrolment enrolment, String studentId) {
 		Student student = this.studentRepo.findById(studentId)
 				.orElseThrow(() -> new ResourceNotFoundException("studentId", "studentId", studentId));
-		String highestQualification = student.getHighestQualification();
-
-		if (highestQualification.equalsIgnoreCase("bca") || highestQualification.equalsIgnoreCase("bsc")) {
-			Map<String, String> suggestionList1 = new HashMap<String, String>();
-
-			suggestionList1.put(" -->CourseName=", "MBA");
-			suggestionList1.put(" -->CourseName=", "MSc");
-			return suggestionList1;
-		} else if (highestQualification.equalsIgnoreCase("Bcom") || highestQualification.equalsIgnoreCase("BBA")) {
-			Map<String, String> suggestionList2 = new HashMap<String, String>();
-			suggestionList2.put(" -->CourseName =", "MBA");
-			suggestionList2.put(" -->CourseName =", "Mcom");
-			return suggestionList2;
-		} else if (highestQualification.equalsIgnoreCase("MBA") || highestQualification.equalsIgnoreCase("MCA")) {
-			Map<String, String> suggestionList2 = new HashMap<String, String>();
-			suggestionList2.put(" -->CourseName =", "MPhil");
-			// suggestionList2.put(" -->CourseName =", "");
-			return suggestionList2;
-		} else {
-			Map<String, String> suggestionList2 = new HashMap<String, String>();
-			suggestionList2.put("No Suggestion Found", "Please Come Back After Some Time");
-			// suggestionList2.put(" -->CourseName =", "");
-			return suggestionList2;
-
+		List<Course> course = courseRepo.findAll();
+		Map<String, String> suggestion = new HashMap<String, String>();
+		boolean flag = false;
+		for (Course allCourse : course) {
+			if (courseRepo.getCourseTagByCourseId(allCourse.getCourseId())
+					.contains(student.getHighestQualification())) {
+				suggestion.put(allCourse.getCourseId(), allCourse.getCourseName());
+				flag = true;
+			}
 		}
+		return suggestion;
 
 	}
 

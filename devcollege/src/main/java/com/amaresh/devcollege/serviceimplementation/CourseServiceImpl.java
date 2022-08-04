@@ -45,28 +45,23 @@ public class CourseServiceImpl implements CourseService {
 				.orElseThrow(() -> new ResourceNotFoundException("courseId", "courseId", courseId));
 		List<Enrolment> enrolements = enrolmentRepo.findAll();
 		ArrayList<String> idData = new ArrayList<String>();
-	//	ArrayList<String> courseStatus = new ArrayList<String>();
 		for (Enrolment enrol : enrolements) {
 			idData.add(enrol.getCourse_id());
-			//courseStatus.add(enrol.getStatus());
-			
+
 		}
-		System.out.println(idData);
-		//System.out.println(courseStatus);
-		
 
 		boolean flag = false;
 		for (int i = 0; i < idData.size(); i++) {
-			if (idData.get(i).equalsIgnoreCase(courseId)) {
+			if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Allocated")) {
 				flag = true;
 				if (flag = true) {
 					course1.setCourseName(course.getCourseName());
 					course1.setCourseDescription(course.getCourseDescription());
-					if(course.getNoOfRegistrations()>0) {
-						course1.setNoOfRegistrations(course1.getNoOfRegistrations()+course.getNoOfRegistrations());
-					}else {
+					if (course.getNoOfRegistrations() > 0) {
+						course1.setNoOfRegistrations(course1.getNoOfRegistrations() + course.getNoOfRegistrations());
+					} else {
 						Map<String, String> error = new HashMap<String, String>();
-						error.put("No of Registrations Cant be Negative Value", ""+course.getNoOfRegistrations());
+						error.put("No of Registrations Cant be Negative Value", "" + course.getNoOfRegistrations());
 						return error;
 					}
 					course1.setCourseFees(course1.getCourseFees());
@@ -74,26 +69,26 @@ public class CourseServiceImpl implements CourseService {
 					course1.setCourseTag(course1.getCourseTag());
 					this.courseRepo.save(course1);
 					Map<String, String> message = new HashMap<String, String>();
-					message.put(
-							"Course Name :"+" Course Discription :"+" No of Registrations :"+" Updated For Course ID =",courseId);
+					message.put("Course Name :" + " Course Discription :" + " No of Registrations :"
+							+ " Updated For Course ID =", courseId);
 					return message;
 				}
 			}
 		}
 		for (int i = 0; i < idData.size(); i++) {
-			if (idData.get(i) != courseId) {
+			if (courseRepo.getStatusByCourseId(courseId) != "Allocated") {
 				course1.setCourseName(course.getCourseName());
 				course1.setCourseDescription(course.getCourseDescription());
 				course1.setCourseDuration(course.getCourseDuration());
 				course1.setCourseFees(course.getCourseFees());
-				if(course.getNoOfRegistrations()>0) {
-					course1.setNoOfRegistrations(course1.getNoOfRegistrations()+course.getNoOfRegistrations());
-				}else {
+				if (course.getNoOfRegistrations() > 0) {
+					course1.setNoOfRegistrations(course1.getNoOfRegistrations() + course.getNoOfRegistrations());
+				} else {
 					Map<String, String> error = new HashMap<String, String>();
-					error.put("No of Registrations Cant be Negative Value", ""+course.getNoOfRegistrations());
+					error.put("No of Registrations Cant be Negative Value", "" + course.getNoOfRegistrations());
 					return error;
 				}
-				
+
 				course1.setCourseTag(course.getCourseTag());
 				this.courseRepo.save(course1);
 				Map<String, String> message = new HashMap<String, String>();
@@ -126,37 +121,35 @@ public class CourseServiceImpl implements CourseService {
 	public Map<String, String> deleteCourse(String courseId) {
 		Course course = this.courseRepo.findById(courseId)
 				.orElseThrow(() -> new ResourceNotFoundException("courseId", "courseId", courseId));
-		List<Enrolment> enrolements = enrolmentRepo.findAll();
-		ArrayList<String> idData = new ArrayList<String>();
-		for (Enrolment enrol : enrolements) {
-			String courseIdTemp = enrol.getCourse_id();
-			idData.add(courseIdTemp);
-		}
-		System.out.println(idData);
-		
-		boolean flag1 = false;
-		for (int i = 0; i < idData.size(); i++) {
-			if (idData.get(i).equalsIgnoreCase(courseId)) {
-				flag1 = true;
+//		List<Enrolment> enrolements = enrolmentRepo.findAll();
+//		ArrayList<String> idData = new ArrayList<String>();
+//		for (Enrolment enrol : enrolements) {
+//			String courseIdTemp = enrol.getCourse_id();
+//			idData.add(courseIdTemp);
+//		}
+//		System.out.println(idData);
+
+		//boolean flag1 = false;
+	//	for (int i = 0; i < idData.size(); i++) {
+			if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Allocated")||courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Inprogress")) {
+				//flag1 = true;
 				Map<String, String> message = new HashMap<String, String>();
 				message.put("Failed to delete course details", courseId);
 				return message;
-				
+
 			}
-		}
-		
-		for (int i = 0; i < idData.size(); i++) {
-			if (idData.get(i) != courseId) {
+		//}
+
+		//for (int i = 0; i < idData.size(); i++) {
+			if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Completed")||courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Cancelled")) {
 				this.courseRepo.delete(course);
-				Map<String, String> message = new HashMap<String, String>();
-				message.put("Successfully Deleted Course details for ID =", courseId);
-				return message;
+				Map<String, String> message1 = new HashMap<String, String>();
+				message1.put("Successfully Deleted Course details for ID =", courseId);
+				return message1;
 			}
-		}
-		
-		
+		//}
+
 		return null;
-		
-		
+
 	}
 }

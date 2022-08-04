@@ -31,7 +31,7 @@ public class CourseDto {
 	@Min(value = 5, message = "No Of Registrations Should be atleast 5 ")
 	@Max(value = 50, message = "No Of Registrations Should be less than 50 ")
 	//@Positive(message = "Value Cant Be Negative")
-	@Digits(message="Invalid number.", fraction = 0, integer = 0)
+	//@Digits(message="Invalid number.", fraction = 0, integer = 0)
 	private int noOfRegistrations;
 
 	@Min(value = 100, message = "Course Fees Should be  greater than 100 Rs")
