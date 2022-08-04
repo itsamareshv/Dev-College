@@ -47,11 +47,9 @@ public class CourseServiceImpl implements CourseService {
 		ArrayList<String> idData = new ArrayList<String>();
 		for (Enrolment enrol : enrolements) {
 			idData.add(enrol.getCourse_id());
-
 		}
 
 		boolean flag = false;
-		for (int i = 0; i < idData.size(); i++) {
 			if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Allocated")) {
 				flag = true;
 				if (flag = true) {
@@ -74,8 +72,6 @@ public class CourseServiceImpl implements CourseService {
 					return message;
 				}
 			}
-		}
-		for (int i = 0; i < idData.size(); i++) {
 			if (courseRepo.getStatusByCourseId(courseId) != "Allocated") {
 				course1.setCourseName(course.getCourseName());
 				course1.setCourseDescription(course.getCourseDescription());
@@ -95,7 +91,7 @@ public class CourseServiceImpl implements CourseService {
 				message.put("Successfully Updated Course details", courseId);
 				return message;
 			}
-		}
+		//}
 		return null;
 	}
 
@@ -121,16 +117,7 @@ public class CourseServiceImpl implements CourseService {
 	public Map<String, String> deleteCourse(String courseId) {
 		Course course = this.courseRepo.findById(courseId)
 				.orElseThrow(() -> new ResourceNotFoundException("courseId", "courseId", courseId));
-//		List<Enrolment> enrolements = enrolmentRepo.findAll();
-//		ArrayList<String> idData = new ArrayList<String>();
-//		for (Enrolment enrol : enrolements) {
-//			String courseIdTemp = enrol.getCourse_id();
-//			idData.add(courseIdTemp);
-//		}
-//		System.out.println(idData);
 
-		//boolean flag1 = false;
-	//	for (int i = 0; i < idData.size(); i++) {
 			if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Allocated")||courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Inprogress")) {
 				//flag1 = true;
 				Map<String, String> message = new HashMap<String, String>();
@@ -138,17 +125,13 @@ public class CourseServiceImpl implements CourseService {
 				return message;
 
 			}
-		//}
 
-		//for (int i = 0; i < idData.size(); i++) {
 			if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Completed")||courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Cancelled")) {
 				this.courseRepo.delete(course);
 				Map<String, String> message1 = new HashMap<String, String>();
 				message1.put("Successfully Deleted Course details for ID =", courseId);
 				return message1;
 			}
-		//}
-
 		return null;
 
 	}

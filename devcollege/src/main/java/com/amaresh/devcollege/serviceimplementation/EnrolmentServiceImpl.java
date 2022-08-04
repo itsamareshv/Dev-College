@@ -1,7 +1,5 @@
 package com.amaresh.devcollege.serviceimplementation;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,14 +65,16 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 
 		List<Enrolment> allEnrolmentsByStudentID = this.enrolmentRepo
 				.getAllEnrolmentsByStudentID(enrolment.getStudent_id());
-		ArrayList<Date> dateData = new ArrayList<Date>();
+		ArrayList<Date> endDateData = new ArrayList<Date>();
+		ArrayList<Date> startDateData = new ArrayList<Date>();
 		for (Enrolment enrolls : allEnrolmentsByStudentID) {
-			dateData.add(enrolls.getCuurseEndDT());
+			endDateData.add(enrolls.getCuurseEndDT());
+			startDateData.add(enrolls.getCuurseEndDT());
 
 		}
-
-		for (int i = 0; i < dateData.size(); i++) {
-			if (dateData.get(i).after(enrolment.getCourseStartDT())) {
+	//	||startDateData.get(i).before(enrolment.getCuurseEndDT())
+		for (int i = 0; i < endDateData.size(); i++) {
+			if (endDateData.get(i).before(enrolment.getCourseStartDT())&& startDateData.get(i).before(enrolment.getCourseStartDT())) {
 				Map<String, String> message1 = new HashMap<String, String>();
 				message1.put("Failed To Enroll For This Course ", "You have taken course in same duration");
 				return message1;
