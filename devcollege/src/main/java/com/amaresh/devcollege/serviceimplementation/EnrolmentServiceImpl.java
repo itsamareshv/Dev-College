@@ -69,12 +69,15 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		ArrayList<Date> startDateData = new ArrayList<Date>();
 		for (Enrolment enrolls : allEnrolmentsByStudentID) {
 			endDateData.add(enrolls.getCuurseEndDT());
-			startDateData.add(enrolls.getCuurseEndDT());
+			startDateData.add(enrolls.getCourseStartDT());
+			System.out.println(startDateData);
+			System.out.println(endDateData);
 
 		}
 	//	||startDateData.get(i).before(enrolment.getCuurseEndDT())
-		for (int i = 0; i < endDateData.size(); i++) {
-			if (endDateData.get(i).before(enrolment.getCourseStartDT())&& startDateData.get(i).before(enrolment.getCourseStartDT())) {
+		for (int i = 0; i < endDateData.size()&& i<startDateData.size(); i++ ) {
+			if (enrolment.getCourseStartDT().before(endDateData.get(i)) && enrolment.getCourseStartDT().after(startDateData.get(i))) {
+				
 				Map<String, String> message1 = new HashMap<String, String>();
 				message1.put("Failed To Enroll For This Course ", "You have taken course in same duration");
 				return message1;
