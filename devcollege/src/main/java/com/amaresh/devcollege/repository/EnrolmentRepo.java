@@ -14,5 +14,4 @@ public interface EnrolmentRepo extends JpaRepository<Enrolment, String>, CrudRep
 	@Query(nativeQuery = true, value = "SELECT * FROM enrolments where student_id=:studentId")
 	public List<Enrolment> getAllEnrolmentsByStudentID(@Param("studentId") String studentId);
 
-	//public void save(EnrolmentResponse response);
 }

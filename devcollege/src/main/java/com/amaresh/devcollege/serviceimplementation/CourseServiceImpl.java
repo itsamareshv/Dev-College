@@ -144,6 +144,5 @@ public class CourseServiceImpl implements CourseService {
 		message1.put("Successfully Deleted Course details for ID =", courseId);
 		return message1;
 
-		// return null;
 	}
 }

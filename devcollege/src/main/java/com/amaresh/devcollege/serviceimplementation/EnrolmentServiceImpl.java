@@ -74,10 +74,10 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			System.out.println(endDateData);
 
 		}
-	//	||startDateData.get(i).before(enrolment.getCuurseEndDT())
-		for (int i = 0; i < endDateData.size()&& i<startDateData.size(); i++ ) {
-			if (enrolment.getCourseStartDT().before(endDateData.get(i)) && enrolment.getCourseStartDT().after(startDateData.get(i))) {
-				
+		for (int i = 0; i < endDateData.size() && i < startDateData.size(); i++) {
+			if (enrolment.getCourseStartDT().before(endDateData.get(i))
+					&& enrolment.getCourseStartDT().after(startDateData.get(i))) {
+
 				Map<String, String> message1 = new HashMap<String, String>();
 				message1.put("Failed To Enroll For This Course ", "You have taken course in same duration");
 				return message1;
@@ -121,6 +121,7 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		this.studentRepo.findById(studentId)
 				.orElseThrow(() -> new ResourceNotFoundException("studentId", "studentId", studentId));
 		List<Enrolment> allEnrols = this.enrolmentRepo.getAllEnrolmentsByStudentID(studentId);
+
 		List<EnrolmentResponse> enrolementeResponseList = new ArrayList<>();
 		for (Enrolment enrols : allEnrols) {
 			EnrolmentResponse enrolmentById = getEnrolmentById(enrols.getEnrolmentId());
@@ -154,15 +155,11 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		if (enrolment2.getStatus().equalsIgnoreCase("Allocated")) {
 			if (enrolment.getStatus().equalsIgnoreCase("Cancelled")) {
 				Date courseStartDate = enrolment2.getCourseStartDT();
-				System.out.println("Course Start Date =" + courseStartDate);
-				
+
 				LocalDateTime courseCanceledDate = LocalDateTime.now();
-				
-				System.out.println("Course Canceled Date " + courseCanceledDate);
-				int courseStartDay = courseStartDate.getDate();
-				int cancelDay = courseCanceledDate.getDayOfMonth();
-				int noOfDaysBeforeCancelled = courseStartDay - cancelDay;
-				System.out.println("difference" + noOfDaysBeforeCancelled);
+
+				int noOfDaysBeforeCancelled = courseStartDate.getDate() - courseCanceledDate.getDayOfMonth();
+
 				if (noOfDaysBeforeCancelled >= 2) {
 					student.setWalletAmount(student.getWalletAmount() + course.getCourseFees());
 					course.setNoOfRegistrations(course.getNoOfRegistrations() + 1);
@@ -180,8 +177,7 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		enrolment2.setStatus(enrolment.getStatus());
 		enrolmentRepo.save(enrolment2);
 		Map<String, String> message = new HashMap<String, String>();
-		message.put("Successfully change the status from old status to new status = " + enrolment2.getStatus()
-				+ "For Enrol ID", enrolmentId);
+		message.put("Successfully changed the status For Enrol ID = ", enrolmentId);
 		return message;
 	}
 

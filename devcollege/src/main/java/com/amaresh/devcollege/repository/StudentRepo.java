@@ -6,9 +6,7 @@ import com.amaresh.devcollege.models.Student;
 
 public interface StudentRepo extends JpaRepository<Student, String> {
 
-	
-	@Query( nativeQuery = true, value="SELECT wallet_amount from students where student_id= :studentId")
+	@Query(nativeQuery = true, value = "SELECT wallet_amount from students where student_id= :studentId")
 	Student findWalletAmountById(String studentId);
 
-	
 }

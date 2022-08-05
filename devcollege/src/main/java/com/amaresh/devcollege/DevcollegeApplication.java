@@ -12,7 +12,7 @@ public class DevcollegeApplication {
 		SpringApplication.run(DevcollegeApplication.class, args);
 	}
 	@Bean
-	public ModelMapper modelMapper() {
+    ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
 

@@ -27,7 +27,6 @@ public class StudentDto {
 	private String highestQualification;
 
 	@NotEmpty
-	
 	@Pattern(regexp="(^$|[0-9]{10})",message = "Input Should Be Digits and size should be 10 digits")
 	//|	Find a match for any one of the patterns separated by | as in: cat|dog|fish
 	//^	Finds a match as the beginning of a string as in: ^Hello
