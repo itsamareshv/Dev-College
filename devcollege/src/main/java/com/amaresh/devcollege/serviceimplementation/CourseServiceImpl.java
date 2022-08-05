@@ -118,23 +118,33 @@ public class CourseServiceImpl implements CourseService {
 		Course course = this.courseRepo.findById(courseId)
 				.orElseThrow(() -> new ResourceNotFoundException("courseId", "courseId", courseId));
 
-		if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Allocated")
-				|| courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Inprogress")) {
-			// flag1 = true;
-			Map<String, String> message = new HashMap<String, String>();
-			message.put("Failed to delete course details", courseId);
-			return message;
+		String statusByCourseId = courseRepo.getStatusByCourseId(courseId);
+
+		if (statusByCourseId != null) {
+			if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Allocated")
+					|| courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Inprogress")) {
+				// flag1 = true;
+				Map<String, String> message = new HashMap<String, String>();
+				message.put("Failed to delete course details", courseId);
+				return message;
+
+			} 
+
+			if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Completed")
+					|| courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Cancelled")) {
+				this.courseRepo.delete(course);
+				Map<String, String> message1 = new HashMap<String, String>();
+				message1.put("Successfully Deleted Course details for ID =", courseId);
+				return message1;
+			}
+			
 
 		}
-
-		if (courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Completed")
-				|| courseRepo.getStatusByCourseId(courseId).equalsIgnoreCase("Cancelled")) {
 			this.courseRepo.delete(course);
 			Map<String, String> message1 = new HashMap<String, String>();
 			message1.put("Successfully Deleted Course details for ID =", courseId);
 			return message1;
-		}
-		return null;
-
+		
+		//return null;
 	}
 }

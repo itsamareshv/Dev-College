@@ -74,12 +74,9 @@ public class StudentServiceImplementation implements StudentService {
 			List<Enrolment> allEnrols = this.enrolmentRepo.getAllEnrolmentsByStudentID(idData.get(i));
 			List<EnrolmentResponse> enrolementeResponseList = new ArrayList<>();
 			for (Enrolment enrols : allEnrols) {
-				//EnrolmentResponse enrolmentById = ();
 				EnrolmentResponse response = this.enrolmentService.getEnrolmentById(enrols.getEnrolmentId());
 				response.setStatus("Cancelled");
-				//enrolmentRepo.save(response.setStatus("Cancelled"));
-				//enrolmentRepo.
-				//this.studentRepo.delete(delStudent);
+//				this.enrolmentRepo.deleteById(response.getStudent_id());
 				Map<String, String> message = new HashMap<String, String>();
 				message.put("Enrolement Status Changed and Deleetd Sucessfully", studentId);
 				return message;
