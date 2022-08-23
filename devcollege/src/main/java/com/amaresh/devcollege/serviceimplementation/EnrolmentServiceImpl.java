@@ -59,7 +59,7 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			System.out.println(calendar.getTime());
 		} else {
 			Map<String, String> message = new HashMap<String, String>();
-			message.put("Cant Opt For Courses Due To Low Wallet Amount", "" + student.getWalletAmount());
+			message.put("Cant Opt For Courses Due To Low Wallet Amount",""+ student.getWalletAmount());
 			return message;
 		}
 
@@ -67,6 +67,7 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 				.getAllEnrolmentsByStudentID(enrolment.getStudent_id());
 		ArrayList<Date> endDateData = new ArrayList<Date>();
 		ArrayList<Date> startDateData = new ArrayList<Date>();
+		
 		for (Enrolment enrolls : allEnrolmentsByStudentID) {
 			endDateData.add(enrolls.getCuurseEndDT());
 			startDateData.add(enrolls.getCourseStartDT());
@@ -74,6 +75,7 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			System.out.println(endDateData);
 
 		}
+		
 		for (int i = 0; i < endDateData.size() && i < startDateData.size(); i++) {
 			if (enrolment.getCourseStartDT().before(endDateData.get(i))
 					&& enrolment.getCourseStartDT().after(startDateData.get(i))) {

@@ -11,6 +11,7 @@ public class DevcollegeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DevcollegeApplication.class, args);
 	}
+	
 	@Bean
     ModelMapper modelMapper() {
 		return new ModelMapper();
