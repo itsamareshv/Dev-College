@@ -20,6 +20,7 @@ public class StudentDto {
 
 	@NotEmpty
 	@Size(min = 4, message = "Student Name Must Be minimum 4 Characters")
+	@Pattern(regexp="^[A-Za-z]+[A-Za-z ]*$",message = "Input Should Be Alphabets")
 	private String studentName;
 
 	@NotEmpty
